@@ -1,10 +1,11 @@
 require 'redmine'
+require 'redmine_ldap_chpasswd_hook'
 
 Redmine::Plugin.register :redmine_ldap_chpasswd do
-  name 'Redmine Ldap Chpasswd plugin'
-  author 'Author name'
+  name 'Redmine LDAP Change Password plugin'
+  author 'Thao Le Thach'
   description 'This is a plugin for Redmine'
   version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  url 'http://code.songphi.org/project/redmine-ldap-chpasswd'
+  author_url 'https://github.com/ycicom'
 end
