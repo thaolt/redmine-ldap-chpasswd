@@ -16,6 +16,6 @@ Redmine::Plugin.register :redmine_ldap_chpasswd do
   author 'Thao Le Thach'
   description 'This is a Redmine\'s plugin for change password of users who authenticating via LDAP'
   version '0.0.1'
-  url 'http://code.songphi.org/project/redmine-ldap-chpasswd'
+  url 'http://code.songphi.org/projects/redmine-ldap-chpasswd'
   author_url 'https://github.com/ycicom'
 end
