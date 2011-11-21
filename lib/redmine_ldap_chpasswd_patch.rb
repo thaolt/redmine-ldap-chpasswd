@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 module RedmineLdapChangePasswordPatch
   def self.included(base) # :nodoc:
     base.send(:include, InstanceMethods)
@@ -19,7 +21,9 @@ module RedmineLdapChangePasswordPatch
         ldap_password =  params[:old_password]
         ldap_new_password =  params[:new_password]
         ldap_confirm_password =  params[:confirm_new_password]
-        self.change_ldap_password(ldap_password, ldap_new_password)
+        if !ldap_password.empty? && !ldap_new_password.empty?
+          self.change_ldap_password(ldap_password, ldap_new_password)
+        end
         if @user.save
           @user.pref.save
           @user.notified_project_ids = (@user.mail_notification == 'selected' ? params[:notified_project_ids] : [])
@@ -35,16 +39,17 @@ module RedmineLdapChangePasswordPatch
       login = "uid=#{@user.login},ou=People"
       treebase = "dc=infocube,dc=ch"
       ldap = Net::LDAP.new 
-      ldap.host = 'localhost'
+      ldap.host = 'working.infocube.ch'
+      ldap.base = "#{treebase}"
       ldap.port = 389
       ldap.auth "#{login},#{treebase}", password
       if ldap.bind
-        e_password = "{SHA}" + encode64(Digest::SHA1.new(newpass).digest).chomp
+        e_password = "{SHA}" + encode64(Digest::SHA1.digest(newpass)).chomp
         # Do the modification
-        ldap.replace_attribute "#{login},#{treebase}", :password, e_password
+        ldap.replace_attribute "#{login},#{treebase}", :userPassword, e_password
         flash[:notice] = "Password update successful"
       else
-        flash[:notice] = "Cannot bind to LDAP server! (User) #{login},#{treebase} (Password) #{password}"
+        flash[:notice] = "Cannot bind to LDAP server! (User) #{login},#{treebase}"
       end
     end#change_ldap_password
 
