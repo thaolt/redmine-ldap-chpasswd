@@ -36,7 +36,7 @@ module RedmineLdapChangePasswordPatch
     end#account_with_ldap_support
 
     def change_ldap_password(password, newpass)
-      flash[:notice] = "#{@user.inspect}"
+      flash[:notice] = @user.to_json
       return
       login = "uid=#{@user.login},ou=People"
       treebase = @user.authSource.baseDn
