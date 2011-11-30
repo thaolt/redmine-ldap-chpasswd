@@ -2,8 +2,8 @@ require 'redmine'
 require 'net/ldap'
 require 'redmine_ldap_chpasswd_viewhook'
 require 'redmine_ldap_chpasswd_patch'
-
 require 'dispatcher'
+
 Dispatcher.to_prepare :redmine_ldap_chpasswd do
   require_dependency 'my_controller'
   unless MyController.included_modules.include? RedmineLdapChangePasswordPatch
