@@ -37,11 +37,11 @@ module RedmineLdapChangePasswordPatch
 
     def change_ldap_password(password, newpass)
       login = "uid=#{@user.login},ou=People"
-      treebase = "dc=infocube,dc=ch"
+      treebase = user.authSource.baseDn
       ldap = Net::LDAP.new 
-      ldap.host = 'working.infocube.ch'
+      ldap.host = user.authSource.host
       ldap.base = "#{treebase}"
-      ldap.port = 389
+      ldap.port = user.authSource.port
       ldap.auth "#{login},#{treebase}", password
       if ldap.bind
         e_password = "{SHA}" + encode64(Digest::SHA1.digest(newpass)).chomp
